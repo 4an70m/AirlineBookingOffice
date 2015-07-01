@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="style_workers.css" target="head" />
+	<script>
+
+		$(document).ready(function(){
+			$('[data-toggle=popover]').popover({
+				html : true, 
+				content: function() {
+				  return $('#popover_content_wrapper').html();
+				}
+			});
+		});		
+		$(document).ready(function(){
+		  if ($(window).width() &lt; 768){  
+			$('#filters').removeClass('in');
+			$('#add-button').addClass('btn-block');
+		  } else {
+			$('#add-button').removeClass('btn-block');
+		  }
+		});
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip(); 
+		});
+	</script>
+  </h:head>
+  <h:body>
+  
+  <f:metadata>
+  	<f:event listener="#{userBean.checkLogged(2)}" type="preRenderView"></f:event>
+  </f:metadata>
+
+<h:form>	
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+ <a class="navbar-br/and" href="index.xhtml" style="padding: 0px"><h:graphicImage value="resources/images/logo.png" id="logo" style="padding: 0px" /></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+		  
+<h:panelGroup rendered="#{userBean.loggedIn}">
+  
+			<li>
+					<h:commandLink action="#{userBean.logOut()}">
+						<span class="glyphicon glyphicon-log-out"></span> 
+						Log Out
+					</h:commandLink>
+			</li>
+		
+</h:panelGroup>
+		  
+<h:panelGroup rendered="#{!userBean.loggedIn}">	  
+			 <li>
+				<a href="registration.xhtml">
+					<span class="glyphicon glyphicon-user"></span> 
+					Register
+				</a>
+			 </li>
+			<li>
+				<a href="#" id="popover-signup" data-toggle="popover" title="Log In" data-placement="bottom">
+					<span class="glyphicon glyphicon-log-in"></span> 
+					Log In
+				</a>
+			</li>
+</h:panelGroup>
+
+			<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+</h:form>
+  	
+	
+	<div id="found-form" class="container" >
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>Workers: </h2>
+			</div>
+			<div class="col-sm-6 text-right">
+				<a href="addworker.xhtml" class="btn btn-primary btn-lg" id="add-button">Add new Worker</a>
+			</div>
+		</div>
+		<br/>
+		<br/>
+		<button type="button" id="button-collapse" class="btn btn-info visible-xs" data-toggle="collapse" data-target="#filters">Filters</button>
+		<div class="row">
+			
+			<div class="col-sm-3 collapse in " id="filters">
+				<p>Filter your results by:</p>
+				<br/>
+				
+				<div class="form-group">
+				  <label for="sel1">Sort by:</label>
+				  <select class="form-control" id="sel1" width="10">
+					<option>Name A to Z</option>
+					<option>Name Z to A</option>
+					<option>Login A to Z</option>
+					<option>Login Z to A</option>
+				  </select>
+				</div>
+				<br/>
+				
+				<p>Position</p>
+				<div class="checkbox">
+				  <label><input type="checkbox" value=""/>Option 1</label>
+				</div>
+				<div class="checkbox">
+				  <label><input type="checkbox" value=""/>Option 2</label>
+				</div>
+				<div class="checkbox">
+				  <label><input type="checkbox" value=""/>Option 3</label>
+				</div>
+				<br/>
+				
+				<p>Airline company</p>
+				<div class="checkbox">
+				  <label><input type="checkbox" value="" checked="true"/>Active</label>
+				</div>
+				<div class="checkbox">
+				  <label><input type="checkbox" value=""/>Disabled</label>
+				</div>
+				<br/>
+				<div class="form-group">
+					<label for="location-to"><span class="glyphicon glyphicon-search"></span> Find worker:</label><br/>
+					<input type="input" class="form-control" placeholder="Name, Login of Tel#"/>
+				</div>
+				<button class="btn btn-succes">Search</button>
+			</div>
+			
+			
+			<div class="col-sm-9">
+#{workersBean.refreshList()}
+				<ui:repeat value="#{workersBean.workersList}" var="worker">				
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-sm-8">
+									<span class="glyphicon glyphicon-user"></span>
+									<h:outputText value="&#160;" />
+									<h:outputText value="#{worker.name}"/> 
+									<h:outputText value="&#160;" />
+									<h:outputText value="#{worker.surname}"/>,
+									<strong>									
+										<h:outputText value="#{workersBean.activityString(worker)}"/>
+									</strong>
+								</div>
+								<div class="col-sm-4 text-right">
+									<strong>
+										<h:outputText value="#{workersBean.position(worker.rights)}"/>
+									</strong>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<span data-toggle="tooltip" title="Login" data-placement="top">
+										<span class="glyphicon glyphicon-log-in"></span> 
+										<strong>
+											<h:outputText value="&#160;" />
+											<h:outputText value="#{worker.login}"/>
+										</strong><br/>
+									</span>
+									<span data-toggle="tooltip" title="Telephone Number" data-placement="top">
+										<span class="glyphicon glyphicon-phone-alt"></span> 
+										<h:outputText value="&#160;" />
+										<h:outputText value="#{worker.telNo}"/><br/>
+									</span>
+									<span data-toggle="tooltip" title="Date of registration" data-placement="top">
+										<span class="glyphicon glyphicon-plus"></span> 
+										<h:outputText value="&#160;" />
+										<h:outputText value="#{worker.dateOfReg}"/>
+									</span>
+								</div>
+								<div class="col-sm-6 text-right form-inline"><br/>
+								<h:form>
+<h:panelGroup rendered="#{workersBean.isActive(worker) == true}">								
+									<h:commandLink action="#{workersBean.deactivate(worker)}" styleClass="btn btn-danger">
+										<span class="glyphicon glyphicon-off"></span> 
+										Deactivate
+									</h:commandLink>
+</h:panelGroup>
+<h:panelGroup rendered="#{workersBean.isActive(worker) != true}">									
+									<h:commandLink action="#{workersBean.reactivate(worker)}" styleClass="btn btn-success">
+										<span class="glyphicon glyphicon-flash"></span> 
+										Reactivate
+									</h:commandLink>
+</h:panelGroup>									
+									<h:outputText value="&#160;" />
+									<h:commandLink action="#{workersBean.edit(worker)}" styleClass="btn btn-primary">
+										<span class="glyphicon glyphicon-pencil"></span>
+										Edit
+									</h:commandLink>
+							
+								</h:form>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</ui:repeat>	
+			</div>
+		</div>
+	</div>
+  </h:body>
+</html>

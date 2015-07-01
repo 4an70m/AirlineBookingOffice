@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="style_editflight.css" target="head" />
+  </h:head>
+  <h:body>
+    
+  <f:metadata>
+  	<f:event listener="#{userBean.checkLogged(1)}" type="preRenderView"></f:event>
+  </f:metadata>
+  
+  <h:form>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+			  <a class="navbar-br/and" href="index.xhtml" style="padding-top: 0px">
+			  	<h:graphicImage value="resources/images/logo.png" id="logo" style="padding-top: 0px" />
+	  		</a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+<h:panelGroup rendered="#{searchBean.searchPerformed}">			  
+		  <li>
+				<a href="airlines.xhtml" id="popover-signup">
+					<span class="glyphicon glyphicon-arrow-left"></span> 
+					Back to Search
+				</a>
+			</li>
+</h:panelGroup>	
+<h:panelGroup rendered="#{userBean.loggedIn}">
+			<li>
+					<h:commandLink action="#{userBean.logOut()}">
+						<span class="glyphicon glyphicon-log-out"></span> 
+						Log Out
+					</h:commandLink>
+			</li>
+</h:panelGroup>
+			<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+</h:form>	
+	
+	#{flightsBean.init()}
+	
+	<div class="container" >
+	
+		<h1><span class="glyphicon glyphicon-pencil"></span> Edit Flight:</h1>
+		
+		<div class="well">
+		
+			<h:form role="form" class="form-inline" id="addedit-form">
+
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="form-group">
+							<label for="location-from"><span class="glyphicon glyphicon-map-marker"></span> From:</label><br/>
+							
+							<h:selectOneMenu class="form-control" id="sel1" value="#{flightsBean.flight.departure.id}">
+								<f:selectItems value="#{flightsBean.arrDeppSet}" var="entry" 
+								itemLabel="#{entry.country}, #{entry.city}, #{entry.airport}" 
+								itemValue="#{entry.id}" /> 
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="form-group" id="to-location">
+							<label for="location-to"><span class="glyphicon glyphicon-map-marker"></span> To:</label><br/>
+							<h:selectOneMenu class="form-control" id="sel2" value="#{flightsBean.flight.arrival.id}">
+								<f:selectItems value="#{flightsBean.arrDeppSet}" var="entry" 
+								itemLabel="#{entry.country}, #{entry.city}, #{entry.airport}" 
+								itemValue="#{entry.id}" /> 
+							</h:selectOneMenu>
+						</div>
+					</div>
+				</div>
+				<br/><br/>
+				
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="form-group" id="to-location">
+							<label for="date-to"><span class="glyphicon glyphicon-calendar"></span> Departure date:</label><br/>
+							<h:inputText type="date" class="form-control" id="date-from" required="true" value="#{flightsBean.departureDate}">
+								<f:convertDateTime pattern="yyyy-MM-dd HH:mm" />
+							</h:inputText>
+						</div>
+					</div>
+					<div class="col-sm-3">	
+						<div class="form-group">
+							<label for="date-from"><span class="glyphicon glyphicon-plane"></span> Aircraft name:</label><br/>
+							<h:selectOneMenu class="form-control" id="sel3" value="#{flightsBean.flight.aircraft.id}">
+								<f:selectItems value="#{flightsBean.aircraftsSet}" var="entry" 
+								itemLabel="#{entry.ownerName}, #{entry.aircraftName}" 
+								itemValue="#{entry.id}" /> 
+							</h:selectOneMenu>
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="date-from"><span class="glyphicon glyphicon-time"></span> Flight time:</label><br/>
+							<h:inputText  required="true" maxlength="4" styleClass="form-control" value="#{flightsBean.flight.flightTime}">                         
+							    <f:convertNumber integerOnly="true"/>
+							</h:inputText>
+						</div>
+					</div>
+				</div>	
+				<br/><br/>
+				
+				<div class="row">
+					<div class="col-sm-3">
+						<div class="form-group">
+							<label for="date-from"><span class="glyphicon glyphicon-usd"></span> Price:</label><br/>
+							<h:inputText  required="true" maxlength="8" styleClass="form-control" value="#{flightsBean.flight.price}">                         
+							    <f:convertNumber doubleOnly="true" groupingUsed="true"/>
+							</h:inputText>
+						</div>
+					</div>
+					<div class="col-sm-3">	
+						<div class="form-group">
+							<label for="date-from"><span class="glyphicon glyphicon-th-list"></span> Amount of tickets:</label><br/>
+							<h:inputText  required="true" maxlength="4" styleClass="form-control" value="#{flightsBean.flight.amountOfTickets}">                         
+							    <f:convertNumber integerOnly="true"/>
+							   <!-- <f:ajax event="change" execute="@this" render="output2"/> --> 
+							</h:inputText>
+							<!-- 
+							<h:panelGroup id="output2">
+								#{flightsBean.checkIfNumberOfTicketsLessThenBooked()}
+
+								<h:panelGroup  rendered="#{flightsBean.ticketsLess}">							
+									<div class="alert alert-danger" style="position: absolute;">
+									  <strong>Warning!</strong> New amount of tickets is less then amount of booked tickets for #{flightsBean.deltaTickets}.
+									</div>
+								</h:panelGroup>
+							</h:panelGroup>
+							 -->
+						</div>
+					</div>	
+			
+					<div class="col-sm-3">	
+						<div class="form-group" id="to-location">
+							<label for="date-to"><span class="glyphicon glyphicon-list"> </span> Flight status:</label><br/>
+							<h:selectOneMenu class="form-control" id="sel4"  width="10" value="#{flightsBean.activity}">
+								<f:selectItems value="#{flightsBean.activityMap.entrySet()}" var="entry"  itemValue="#{entry.key}" itemLabel="#{entry.value}" />
+								<f:ajax event="change" execute="@this" render="output"/>
+							</h:selectOneMenu>
+							
+							<h:panelGroup id="output">
+								#{flightsBean.checkIfActivityClosesBooking()}
+
+								<h:panelGroup  rendered="#{flightsBean.closingFlight}">							
+									<div class="alert alert-danger" style="position: absolute;">
+									  <strong>Warning!</strong> Changing flights status will cause closing of #{flightsBean.closingBookings} booked tickets.
+									</div>
+								</h:panelGroup>
+							</h:panelGroup>
+						</div>
+					</div>	
+				</div>
+				<br/>
+				
+				
+				
+				<br/>
+				<div class="text-left">
+					<h:commandButton class="btn btn-primary btn-lg" id="button-save" value="Save editing" action="#{flightsBean.saveEditing()}"/>	
+					<a href="javascript:history.back()" class="btn btn-warning btn-lg" id="button-add"> <span class="glyphicon glyphicon-remove"></span>  Discard changes</a>	
+				</div>
+			</h:form>
+		
+		</div>
+	</div>
+	
+	
+  </h:body>
+</html>

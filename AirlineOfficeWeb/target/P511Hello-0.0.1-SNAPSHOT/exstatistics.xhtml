@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+     #{reportBean.exRepVisit()}
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+  	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputScript library="js" name="highcharts.js" target="head" />
+	<h:outputStylesheet library="css" name="style_statistics.css" target="head" />
+	
+	<script>
+	$(function () {
+	    $('#container').highcharts({
+	        chart: {
+	            plotBackgroundColor: #{reportBean.pieModel.chartPlotBackgroundColor},
+	            plotBorderWidth: #{reportBean.pieModel.chartPlotBorderWidth},
+	            plotShadow: #{reportBean.pieModel.chartPlotShadow}
+	        },
+	        title: {
+	            text: #{reportBean.pieModel.titleText}
+	        },
+	        subtitle: {
+	            text: #{reportBean.pieModel.subtitleText},
+	            x: -20
+	        },
+	        tooltip: {
+	            pointFormat: #{reportBean.pieModel.tooltipPointFormat}
+	        },
+	        plotOptions: {
+	            pie: {
+	                allowPointSelect: #{reportBean.pieModel.plotOptionsPieAllowPointSelect},
+	                cursor: #{reportBean.pieModel.plotOptionsPieCursor},
+	                dataLabels: {
+	                    enabled: #{reportBean.pieModel.plotOptionsPieDataLabelsEnabled},
+	                    format: #{reportBean.pieModel.plotOptionsPieDataLabelsFormat},
+	                    style: #{reportBean.pieModel.plotOptionsPieDataLabelsStyle}
+	                }
+	            }
+	        },
+	        series: #{reportBean.pieModel.series}
+	    });
+	});
+	
+	$(function() {
+		$(".datepicker").datepicker({
+			dateFormat: "yy-mm-dd"
+		});
+	});
+	
+	</script>
+	
+	
+  </h:head>
+  <h:body>
+  
+  <f:metadata>
+  	<f:event listener="#{userBean.checkLogged(0)}" type="preRenderView"></f:event>
+  </f:metadata>
+  
+ <h:form>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		<a class="navbar-br//and" href="index.xhtml" style="padding: 0px"><h:graphicImage value="resources/images/logo.png" id="logo" style="padding: 0px" /></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+		  
+		  <h:panelGroup rendered="#{userBean.loggedIn}">
+		  		<li>
+					<a href="airlines.xhtml" id="popover-signup">
+						<span class="glyphicon glyphicon-arrow-left"></span> 
+						To main Page
+					</a>
+				</li>
+		  		<li>
+						<h:commandLink action="#{reportBean.switchPage()}">
+							<span class="glyphicon glyphicon-signal"></span> 
+							Statistics
+						</h:commandLink>
+				</li>	
+				<li>
+						<h:commandLink action="#{userBean.logOut()}">
+							<span class="glyphicon glyphicon-log-out"></span> 
+							Log Out
+						</h:commandLink>
+				</li>	
+			</h:panelGroup>
+			
+			<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+</h:form>		
+	
+	
+	<div class="container" >
+	
+		<div class="row">
+			<div class="col-sm-4">
+			<h2>Extended Report</h2>
+				<p>Sold tickets for destinations:</p><br/>    
+			</div>
+			<h:form role="form" class="form-inline">
+			
+				<div class="col-sm-2 ">
+					<div class="form-group">
+						<label for="date-to"><span class="glyphicon glyphicon-calendar"></span> Date from:</label>
+						<h:inputText type="date" class="form-control datepicker" required="true"
+						value="#{reportBean.dateFrom}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:inputText>
+					</div>
+				</div>
+				
+				<div class="col-sm-2">	
+					<div class="form-group">
+						<label for="date-from"><span class="glyphicon glyphicon-calendar"></span> Date to:</label>
+						<h:inputText type="date" class="form-control datepicker" required="true" 
+						value="#{reportBean.dateTo}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:inputText>
+					</div>
+				</div>
+				
+				<div class="col-sm-2">
+					<div class="form-group">
+						<label for="sel1"><span class="glyphicon glyphicon-signal"></span> Status:</label>
+						<h:selectOneMenu class="form-control" required="true"
+							value="#{reportBean.status}" id="sel1">
+							<f:selectItems  value="#{reportBean.statusMap.entrySet()}" var="entry"  itemValue="#{entry.key}" itemLabel="#{entry.value}"/>
+						</h:selectOneMenu>
+					</div>
+				</div>
+				
+				<div class="col-sm-2 text-right" id="button-col">
+					<h:commandButton class="btn btn-primary btn-lg" 
+					action="#{reportBean.getExReport()}" value="Get report" />	
+				</div>
+			</h:form>
+		</div>
+	
+		
+		<h:panelGroup name="chart" layout="block" rendered="#{reportBean.reportRequested}" id="container" style="min-width: 310px; height: 400px; margin: 0 auto" />
+        
+	<table class="table table-hover" id="table-stats">
+		<thead>
+		  <tr>
+			<th>Destination</th>
+			<th>Tickets #{reportBean.type}</th>
+		  </tr>
+		</thead>
+		<tbody>
+		
+<ui:repeat value="#{reportBean.exReportList}" var="f">
+		  <tr>
+			<td>#{f.arrivalsDepartures.airport}, #{f.arrivalsDepartures.city}</td>
+			<td>#{f.amountOfTickets}</td>
+		  </tr>
+</ui:repeat>	  
+	
+		<tr>
+			
+			<td><strong>Total #{reportBean.type} in #{reportBean.days} days</strong></td>
+			<td><strong>#{reportBean.totalTickets} tickets</strong></td>
+			
+	  	</tr>
+
+
+		</tbody>
+	</table>
+
+	
+
+	</div>
+
+  </h:body>
+</html>

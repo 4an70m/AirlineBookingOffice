@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+  	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="style_bookings.css" target="head" />
+	<script>
+		
+		$(document).ready(function(){
+		  if ($(window).width() &lt; 768){  
+			$('#filters').removeClass('in');
+			$('#add-button').addClass('btn-block');
+		  } else {
+			$('#add-button').removeClass('btn-block');
+		  }
+		});
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip(); 
+		});
+		
+		$(function() {
+			$(".datepicker").datepicker({
+				dateFormat: "yy-mm-dd"
+			});
+		});
+		
+	</script>
+  </h:head>
+  <h:body>
+  
+    <f:metadata>
+  	<f:event listener="#{userBean.checkLogged(3)}" type="preRenderView"></f:event>
+  </f:metadata>
+  
+   	<h:outputScript library="js" name="fixbug.js" target="head"/>
+  <h:form>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		 <a class="navbar-br/and" href="index.xhtml" style="padding: 0px"><h:graphicImage value="resources/images/logo.png" id="logo" style="padding: 0px" /></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+			<h:panelGroup rendered="#{userBean.loggedIn}">
+  
+			<li>
+					<h:commandLink action="#{userBean.logOut()}">
+						<span class="glyphicon glyphicon-log-out"></span> 
+						Log Out
+					</h:commandLink>
+			</li>
+		
+			</h:panelGroup>
+			<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+	</h:form>
+	<div id="found-form" class="container" >
+		<div class="row">
+			<div class="col-sm-9">
+				<h2>Bookings for #{currentDate}: </h2>
+				<br/><br/>
+			</div>
+		</div>
+		<br/>
+		<button type="button" id="button-collapse" class="btn btn-info visible-xs" data-toggle="collapse" data-target="#filters">Filters</button>
+		<div class="row">
+			
+			<div class="col-sm-3 collapse in " id="filters">
+				<p>Filter your results by:</p>
+				<br/>
+				
+				<h:form>
+				
+				<div class="form-group">
+				  <label for="sel1">Sort by:</label>		
+				  	<h:selectOneMenu id="sel1" class="form-control" value="#{bookingsBean.sort}" width="10">
+						<f:selectItem itemValue="1" itemLabel="Login A to Z"/>
+						<f:selectItem itemValue="2" itemLabel="Login Z to A"/>
+						<f:ajax event="change" execute="@this" render=":table-item"/>
+					</h:selectOneMenu>
+				</div>
+				<br/>
+				
+				<p><strong>For date:</strong></p>	
+					<h:inputText type="date" class="form-control datepicker" id="date-to" value="#{bookingsBean.date}" width="10">
+					  	<f:ajax event="change" execute="@this" render=":table-item"/>
+						<f:convertDateTime pattern="yyyy-MM-dd" />
+					</h:inputText>							
+				<br/>
+				
+				</h:form>
+			</div>
+			
+			
+			<div class="col-sm-9">
+			
+#{bookingsBean.refreshBookings()}	
+
+
+<h:dataTable value="#{bookingsBean.bookingsList}" var="b" id="table-item">
+	<h:column>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<div class="row">
+								<div class="col-sm-8">
+									<span class="glyphicon glyphicon-user"></span> 
+									<span data-toggle="tooltip" title="User login" data-placement="top">
+										#{b.user.login}
+									</span>
+								</div>
+								<div class="col-sm-4 text-right">
+									<strong>Sum: #{bookingsBean.sum(b.amountOfTickets, b.flight.price)}$</strong>
+								</div>
+							</div>
+						</div>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-sm-6">
+									<span data-toggle="tooltip" title="Flight" data-placement="top">
+										<span class="glyphicon glyphicon-plane"></span> 
+										Flight: 
+										#{b.flight.departure.city} - 
+										#{b.flight.arrival.city}, 
+										#{b.flight.departureDate}
+										<br/>
+									</span>
+									<span data-toggle="tooltip" title="Date of booking" data-placement="top">
+										<span class="glyphicon glyphicon-calendar"></span> 
+										Date of booking: #{b.dateOfBooking}<br/>
+									</span>
+									<span data-toggle="tooltip" title="Amount of Tickets" data-placement="top">
+										<span class="glyphicon glyphicon-list"></span> 
+										Tickets: #{b.amountOfTickets}<br/>
+									</span>
+								</div>
+								<div class="col-sm-6 text-right form-inline"><br/>
+								<h:form>
+									<h:commandLink class="btn btn-success" action="#{bookingsBean.setPaid(b)}">
+										<span class="glyphicon glyphicon-usd"></span> 
+										Pay
+									</h:commandLink>
+								</h:form>
+								</div>
+							</div>
+						</div>
+					</div>
+		</h:column>
+</h:dataTable>		
+			</div>
+		</div>
+	</div>
+	
+	
+  </h:body>
+</html>

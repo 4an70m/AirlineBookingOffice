@@ -1,0 +1,11 @@
+#divider{
+	color: darkgray; 
+	line-height: 20px; 
+	font-size: 20px; 
+	display: block; 
+	padding: 13px 1px;
+ }
+
+ #popover_content_wrapper{
+ 	display: none;
+ }

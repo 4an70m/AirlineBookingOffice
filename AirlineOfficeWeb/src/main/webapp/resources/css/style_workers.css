@@ -1,0 +1,104 @@
+body{
+	background-color: #F0F0F0;
+}
+#divider{
+	color: darkgray; 
+	line-height: 20px; 
+	font-size: 20px; 
+	display: block; 
+	padding: 13px 1px;
+ }
+#logo{
+	margin-top: -16px;
+}
+#main-body{
+	background-color: rgba(0, 0, 0, 0.71);
+	z-index: 100;
+	position:absolute; 
+	top:60px;
+	left: 4%;
+}
+#myCarousel{
+  margin-top: -20px;
+}
+#cars{
+	z-index: -1;
+}
+#searchform-form{
+	color: white;
+	padding: 30px
+}
+H1{
+	color: white;
+	padding: 10px;
+	padding-left: 30px;
+	padding-bottom: 0px;
+}
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+}
+#alert-holder{
+	display: none;
+}
+@media(max-width: 768px){
+	#main-body{
+		position:absolute;
+		top: 20px;
+		left: 0px;
+	}
+	H2{
+		padding: 10px;
+		margin: 0 auto;
+	}
+	H4{
+		margin: 30px;
+	}	
+}
+#input-price{
+	width: 150px;
+}
+
+#popover_content_wrapper{
+	display: none;
+}
+
+#login-form{
+	color: black;
+}
+
+#bucket{
+	border: 1px solid lightgray;
+}
+
+small{
+	color: grey;
+}
+
+H2{
+	margin-top: 0px;
+}
+
+.form-group select{
+	width: 170px;
+}
+
+#button-collapse{
+	width: 80%;
+	padding: 20px;
+	margin: 0 auto;
+	margin-bottom: 30px;
+}
+
+#table-item{
+	width: 100%;
+}
+
+.selection tr td{
+	display:block;
+   	float: left;
+   	padding-left: 20px;
+   	padding-top: 5px;
+   	padding-bottom: 5px;
+    width: 100%;
+} 

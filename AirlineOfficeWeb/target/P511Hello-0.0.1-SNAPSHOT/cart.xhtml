@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" /> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="style_cart.css" target="head" />
+	<script>
+
+		$(document).ready(function(){
+			$('[data-toggle=popover]').popover({
+				html : true, 
+				content: function() {
+				  return $('#popover_content_wrapper').html();
+				}
+			});
+		});		
+	</script>
+  </h:head>
+  <h:body>
+  
+    <f:metadata>
+  	<f:event listener="#{userBean.checkLogged(-1)}" type="preRenderView"></f:event>
+  </f:metadata>
+  
+  #{cartBean.checkUser(userBean.user.id)}
+  
+  <h:form>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		 <a class="navbar-br/and" href="index.xhtml" style="padding: 0px"><h:graphicImage value="resources/images/logo.png" id="logo" style="padding: 0px"/></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+ <h:panelGroup rendered="#{searchBean.searchPerformed}">			  
+		  <li>
+				<a href="airlines.xhtml" id="popover-signup">
+					<span class="glyphicon glyphicon-arrow-left"></span> 
+					Back to Search
+				</a>
+			</li>
+</h:panelGroup>	  
+		  <li>
+				<a href="index.xhtml" id="popover-signup">
+					<span class="glyphicon glyphicon-search"></span> 
+					Search Flights
+				</a>
+			</li>
+ <h:panelGroup rendered="#{!userBean.loggedIn}">	  
+			 <li>
+				<a href="registration.xhtml">
+					<span class="glyphicon glyphicon-user"></span> 
+					Register
+				</a>
+			 </li>
+			<li>
+				<a href="#" id="popover-signup" data-toggle="popover" title="Log in" data-placement="bottom">
+					<span class="glyphicon glyphicon-log-in"></span> 
+					Log In
+				</a>
+			</li>
+</h:panelGroup>
+<h:panelGroup rendered="#{userBean.loggedIn}">
+			<li>
+					<h:commandLink action="#{userBean.logOut()}">
+						<span class="glyphicon glyphicon-log-out"></span> 
+						Log Out
+					</h:commandLink>
+			</li>	
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn == true and userBean.worker != true}">  
+			<li>
+				<a href="cart.xhtml">
+					<span class="glyphicon glyphicon-shopping-cart"></span> 
+					Cart
+				</a>
+			</li>
+	</h:panelGroup>
+			<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+</h:form>	
+	
+	<div class="container" >
+	<div class="row">
+			
+			<div class="col-sm-9">
+			<h2>Your cart <span class="glyphicon glyphicon-shopping-cart"></span></h2>
+			</div>
+			<div class="col-sm-3 text-right">
+				<h2>$<h:outputText value="#{cartBean.getTotal()}" /></h2>
+			</div>
+	</div>		
+			
+		<br/><br/>
+		
+		
+		
+		<div class="row">
+			
+			<div class="col-sm-9">
+				
+<ui:repeat value="#{cartBean.bookingsList}" var="booking">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-sm-8">
+								<span class="glyphicon glyphicon-arrow-left"></span> FROM:
+								<h:outputText value="#{booking.flight.departure.city}" />, 
+								<h:outputText value="#{booking.flight.departure.airport}" />,  
+								<h:outputText value="#{booking.flight.departure.country}" /> <br/> 
+								<span class="glyphicon glyphicon-arrow-right"></span> TO: 
+								<h:outputText value="#{booking.flight.arrival.city}" />, 
+								<h:outputText value="#{booking.flight.arrival.airport}" />,  
+								<h:outputText value="#{booking.flight.arrival.country}" /> 
+							</div>
+							<div class="col-sm-4 text-right">
+								Price: 
+								<h:outputText value="#{booking.flight.price}" />
+								<br/>
+								Sum: 
+								<h:outputText value="#{cartBean.sum(booking.amountOfTickets, booking.flight.price)}" />
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-4">
+								Departure date:
+								<h:outputText value="#{booking.flight.departureDate}" />
+							</div>
+							<div class="col-sm-3">
+								Time of flight:
+								<h:outputText value="#{booking.flight.flightTime}" />
+								m. 
+							</div>
+					
+							<div class="col-sm-5 text-right">
+							  	<h:form>
+									<h:commandLink action="#{cartBean.removeFromCart(booking)}"	styleClass="btn btn-danger">
+										<span class="glyphicon glyphicon-remove"></span> 
+										Remove
+									</h:commandLink>
+									<!--
+									<h:commandLink action="#{cartBean.edit(booking)}" styleClass="btn btn-warning">
+										<span class="glyphicon glyphicon-pencil"></span> 
+										Edit	
+									</h:commandLink>
+									-->
+									<h:commandLink action="#{cartBean.acceptBooking(booking)}" styleClass="btn btn-primary">
+										<span class="glyphicon glyphicon-ok"></span> 
+										Accept booking
+									</h:commandLink>
+								</h:form>	
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<small>Airline company: 
+									<h:outputText value="#{booking.flight.aircraft.ownerName}" />	
+								</small>
+							</div>
+							<div class="col-sm-8 text-right">
+								<small>Booked: 
+									<h:outputText value="#{booking.amountOfTickets}" />	
+								</small>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+</ui:repeat>
+			
+				
+			</div>
+			
+			<div class="col-sm-3" id="history-col">
+				
+				<h4>Previous bookings</h4>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-sm-8">
+								<span class="glyphicon glyphicon-arrow-left"></span> FROM: Kiev, Borispil airport, Ukraine<br/>
+								<span class="glyphicon glyphicon-arrow-right"></span> TO: New York, Main Airport, USA
+							</div>
+							<div class="col-sm-4 text-right">
+								Price: 1000$<br/>
+								Sum: 3000$
+							</div>
+						</div>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-6">
+								Departure: 12.12.2012<br/>
+								12:30am
+							</div>
+					
+						</div>
+						<div class="row">
+							<div class="col-sm-4">
+								<small>Airline company: UkrAir</small>
+							</div>
+							<div class="col-sm-8 text-right">
+								<small>Booked: 3</small>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+				
+			</div>
+			
+			
+			
+		</div>
+	
+	</div>
+	
+	
+	<div id="popover_content_wrapper">
+		<h:form role="form" class="form-inline" id="login-form">
+			<div class="form-group">
+				<h:inputText class="form-control" name="login" placeholder="Username" value="#{userBean.login}"/>
+			</div><br /><br />
+			<div class="form-group">
+				<h:inputSecret class="form-control" name="password" placeholder="Password" value="#{userBean.password}"/>
+			</div><br /><br />
+			<h:commandButton class="btn btn-primary" id="button-search" value="Confirm" action="#{userBean.logIn()}" />
+		</h:form>
+	</div>
+	
+	
+  </h:body>
+</html>

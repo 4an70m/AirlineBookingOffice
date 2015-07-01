@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css"/>
+  	<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+ 	 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="style.css" target="head" />
+	<script>
+
+		$(document).ready(function(){
+			$('[data-toggle=popover]').popover({
+				html : true, 
+				content: function() {
+				  return $('#popover_content_wrapper').html();
+				}
+			});
+		});
+		
+		$(function() {
+			$(".datepicker").datepicker({
+				dateFormat: "yy-mm-dd"
+			});
+		});
+		
+	</script>
+  </h:head>
+  <h:body>
+  	
+  	#{userBean.checkIfLoggedIn(registrationBean.user, registrationBean.loggedIn)}
+  	#{userBean.getRights(userBean.getWorker())}
+  
+	<h:form>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="index.xhtml" style="padding: 0px; padding-left: 15px;"><h:graphicImage value="resources/images/logo.png" id="logo" style="padding: 0px"/></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+		  
+	<h:panelGroup rendered="#{!userBean.loggedIn}">	  
+			 <li>
+				<a href="registration.xhtml">
+					<span class="glyphicon glyphicon-user"></span> 
+					Register
+				</a>
+			 </li>
+			<li>
+				<a href="#" id="popover-signup" data-toggle="popover" title="Log In" data-placement="bottom">
+					<span class="glyphicon glyphicon-log-in"></span> 
+					Log In
+				</a>
+			</li>		
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn == true and userBean.worker == true and userBean.analyst == true}">
+			<li>	
+				<a href="statistics.xhtml">
+					<span class="glyphicon glyphicon-signal"></span> 
+					Statistics
+				</a>
+			</li>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn == true and userBean.worker == true and userBean.manger == true}">
+			<li>	
+				<a href="addflight.xhtml">
+					<span class="glyphicon glyphicon-plane"></span> 
+					Add new Flight
+				</a>
+			</li>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn == true and userBean.worker == true and userBean.accountant == true}">
+			<li>	
+				<a href="bookings.xhtml">
+					<span class="glyphicon glyphicon-list"></span> 
+					Bookings
+				</a>
+			</li>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn == true and userBean.worker == true and userBean.securityOfficer == true}">
+			<li>	
+				<a href="workers.xhtml">
+					<span class="glyphicon glyphicon-user"></span> 
+					Workers
+				</a>
+			</li>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn}">
+			<li>
+					<h:commandLink action="#{userBean.logOut()}">
+						<span class="glyphicon glyphicon-log-out"></span> 
+						Log Out
+					</h:commandLink>
+			</li>	
+	</h:panelGroup>
+	<h:panelGroup rendered="#{userBean.loggedIn == true and userBean.worker != true}">  
+			<li>
+				<a href="cart.xhtml">
+					<span class="glyphicon glyphicon-shopping-cart"></span> 
+					Cart
+				</a>
+			</li>
+	</h:panelGroup>
+
+	<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+</h:form>	
+	
+	#{searchBean.refreshSearch()}
+	
+	<div id="searchform" class="container-full" >
+	
+	<div id="myCarousel" class="carousel slide" data-ride="carousel">
+		
+		<div class="carousel-inner  hidden-xs" role="listbox" id="cars">
+			<div class="item active">
+			  <h:graphicImage styleClass="img-responsive" value="resources/images/car1.jpg" />
+			</div>
+			<div class="item">
+			  <h:graphicImage styleClass="img-responsive" value="resources/images/car2.jpg" />
+			</div>
+			<div class="item">
+			  <h:graphicImage styleClass="img-responsive" value="resources/images/car3.jpg" />
+			</div>
+		</div>
+	
+		<div class="container" id="main-body">
+		<h1>
+			Search for tickets
+		</h1>
+	
+		<h:form role="form" class="form-inline" id="searchform-form">
+
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label for="location-from"><span class="glyphicon glyphicon-map-marker"></span> From:</label><br />
+						<h:inputText type="input" class="form-control" id="location-from" placeholder="City or airport" size="40" required="true" value="#{searchBean.fromPlace}" >
+						<!-- 	  <f:ajax event="keyup" execute="location-from" render="output"></f:ajax> -->
+						</h:inputText>
+<!-- 								
+						<h:outputText value="#{searchBean.fromPlace}" id="output"/>
+				<h:panelGroup id="output">	
+					<ul style="position: absolute; top: 10px; left: 10px;">
+						#{ajaxBean.findPlaces(searchBean.fromPlace)}
+						<ui:repeat value="#{ajaxBean.outputList}" var="place">
+							<li><div onclick="getHint(this.innerHTML)" class="hint-txt">
+									#{place.city}, #{place.airport}, #{place.country}   
+								</div>
+							</li>
+							</ui:repeat>
+					
+					</ul>	
+					</h:panelGroup>	
+-->	
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group" id="to-location">
+						<label for="location-to"><span class="glyphicon glyphicon-map-marker"></span> To:</label><br />
+						<h:inputText type="input" class="form-control" id="location-to" placeholder="City or airport" size="40" required="true" value="#{searchBean.toPlace}"/>
+					</div>
+				</div>
+			</div>
+			<br /><br />
+			
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group" id="to-location">
+						<label for="date-to"><span class="glyphicon glyphicon-calendar"></span> Date from:</label><br />
+						<h:inputText type="date" class="form-control datepicker" id="date-to" placeholder="Departure date finish" required="true" value="#{searchBean.fromDate}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:inputText>
+					</div>
+				</div>
+				<div class="col-sm-3">	
+					<div class="form-group">
+						<label ><span class="glyphicon glyphicon-calendar"></span> Date to:</label><br />
+						<h:inputText type="date" class="form-control datepicker" id="date-from" placeholder="Departure date start" required="true" value="#{searchBean.toDate}">
+							<f:convertDateTime pattern="yyyy-MM-dd" />
+						</h:inputText>
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label ><span class="glyphicon glyphicon-plane"></span> Prefered airlines:</label><br />
+						<h:inputText type="text" class="form-control" placeholder="Type in the name" value="#{searchBean.preferedAirlines}"/>
+					</div>
+				</div>
+			</div>	
+			<br /><br />
+			
+			<div class="row">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label ><span class="glyphicon glyphicon-usd"></span> Maximum price:</label><br />
+						<h:inputText type="number" class="form-control" id="input-price" step="100" min="0" placeholder="Leave if any" max="4000" value="#{searchBean.maximumPrice}">
+							<f:convertNumber integerOnly="true"/>
+						</h:inputText>
+					</div>
+				</div>
+				<div class="col-sm-3">	
+					<div class="form-group" id="to-location">
+						<label for="sel1"><span class="glyphicon glyphicon-list"> </span> Amount of tickets:</label><br />
+						<h:selectOneMenu class="form-control" id="sel1" value="#{searchBean.amountOfTickets}">
+							<f:selectItem itemValue="1" itemLabel="1"/>
+							<f:selectItem itemValue="2" itemLabel="2"/>
+							<f:selectItem itemValue="3" itemLabel="3"/>
+							<f:selectItem itemValue="4" itemLabel="4"/>
+							<f:selectItem itemValue="5" itemLabel="5"/>
+						</h:selectOneMenu>
+					</div>
+				</div>
+			</div>	
+			<br /><br />
+			
+			<h:commandButton type="submit" class="btn btn-primary" id="button-search" action="airlines" value="Search" />	
+		</h:form>
+		</div>
+	</div>
+	</div>
+
+	<div id="popover_content_wrapper">
+		<h:form role="form" class="form-inline" id="login-form">
+			<div class="form-group">
+				<h:inputText class="form-control" name="login" placeholder="Username" value="#{userBean.login}"/>
+			</div><br /><br />
+			<div class="form-group">
+				<h:inputSecret class="form-control" name="password" placeholder="Password" value="#{userBean.password}"/>
+			</div><br /><br />
+			<h:commandButton class="btn btn-primary" id="button-search" value="Confirm" action="#{userBean.logIn()}" />
+		</h:form>
+	</div>
+  </h:body>
+</html>

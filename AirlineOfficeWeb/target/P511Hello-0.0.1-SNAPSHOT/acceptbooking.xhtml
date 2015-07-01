@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://java.sun.com/jsf/html"
+xmlns:f="http://java.sun.com/jsf/core"
+xmlns:ui="http://java.sun.com/jsf/facelets">
+  <h:head>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+	<h:outputStylesheet library="css" name="style_acceptbooking.css" target="head" />
+	<script>
+
+		$(document).ready(function(){
+			$('[data-toggle=popover]').popover({
+				html : true, 
+				content: function() {
+				  return $('#popover_content_wrapper').html();
+				}
+			});
+		});
+	</script>
+  </h:head>
+  <h:body>
+  
+  <f:metadata>
+  	<f:event listener="#{userBean.checkLogged(-1)}" type="preRenderView"></f:event>
+  </f:metadata>
+  
+  <h:form>
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<div class="navbar-header">
+		  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		  </button>
+		  <a class="navbar-brand" href="index.xhtml" style="padding: 0px; padding-left: 15px;"><h:graphicImage value="resources/images/logo.png" id="logo" style="padding: 0px;"/></a>
+		</div>
+		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+		  <ul class="nav navbar-nav navbar-right">
+	
+		  	<li>
+				<a href="cart.xhtml" id="popover-signup">
+					<span class="glyphicon glyphicon-arrow-left"></span> 
+					Back to Cart
+				</a>
+			</li>
+			
+<h:panelGroup rendered="#{!userBean.loggedIn}">	  
+			 <li>
+				<a href="registration.xhtml">
+					<span class="glyphicon glyphicon-user"></span> 
+					Register
+				</a>
+			 </li>
+			<li>
+				<a href="#" id="popover-signup" data-toggle="popover" title="Log in" data-placement="bottom">
+					<span class="glyphicon glyphicon-log-in"></span> 
+					Log In
+				</a>
+			</li>
+</h:panelGroup>
+		<h:panelGroup rendered="#{userBean.loggedIn}">	  
+					<li>
+						<h:commandLink action="#{userBean.logOut()}">
+							<span class="glyphicon glyphicon-log-out"></span> 
+							Log Out
+						</h:commandLink>
+					</li>	
+		</h:panelGroup>
+			<li><span  class="hidden-xs" id="divider">|</span></li>
+			<li class="dropdown">
+			  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Language<span class="caret"></span></a>
+			  <ul class="dropdown-menu" role="menu">
+				<li><a href="#">English</a></li>
+				<li><a href="#">Russian</a></li>
+			  </ul>
+			</li>
+		  </ul>
+		</div><!-- /.navbar-collapse -->
+	  </div>
+	</nav>
+</h:form>	
+	
+	<div class="container" >
+	
+		<h1><span class="glyphicon glyphicon-ok"></span> Accept Booking:</h1>
+		
+		
+					
+<h:form role="form" class="form-inline" id="addedit-form">					
+<ui:repeat value="#{cartBean.ticketsModelList}" var="ticket">
+
+	<div class="well">
+			<div class="row">
+			<div class="col-sm-2">
+				<div class="ticket text-center"><h3>Ticket</h3></div>
+			</div>
+			<div class="col-sm-10">
+				
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group" id="to-location">
+								<label for="date-to"> First Name:</label><br/>
+								<h:inputText class="form-control " placeholder="First Name" required="true" value="#{ticket.firstName}"/>
+							</div>
+						</div>
+						<div class="col-sm-4">	
+							<div class="form-group">
+								<label for="date-from"> Last Name:</label><br/>
+								<h:inputText class="form-control " placeholder="Last Name" required="true" value="#{ticket.lastName}"/>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="date-from">Patronimic:</label><br/>
+								<h:inputText class="form-control " placeholder="Patronimic" required="true" value="#{ticket.patronimic}"/>
+							</div>
+						</div>
+					</div>	
+					<br/><br/>
+					
+					<div class="row">
+						<div class="col-sm-4">
+							<div class="form-group" id="to-location">
+								<label for="date-to">Passport Number:</label><br/>
+								<h:inputText class="form-control" placeholder="Passport Number" required="true" value="#{ticket.passportNumber}"/>
+							</div>
+						</div>
+						<div class="col-sm-4">	
+							<div class="form-group">
+								<label for="date-from">Serial Number:</label><br/>
+								<h:inputText class="form-control " placeholder="Serial Number" required="true" value="#{ticket.passportSerialNumber}"/>
+							</div>
+						</div>
+						<div class="col-sm-4">
+							<div class="form-group">
+								<label for="date-from">Date of Birth:</label><br/>
+								<h:inputText class="form-control"  placeholder="Date of Birth" required="true" value="#{ticket.dateOfBirth}">
+									<f:convertDateTime pattern="yyyy-MM-dd" />
+								</h:inputText>
+							</div>
+						</div>
+					</div>	
+					<br/><br/>
+					</div>
+			</div>
+		</div>
+</ui:repeat>
+					
+		<h:commandButton type="submit" class="btn btn-primary btn-lg" id="button-save" value="Order tickets" action="#{cartBean.orderTickets(userBean.user)}" />	
+</h:form>
+			
+			
+		
+		
+	</div>
+	
+	<div id="popover_content_wrapper">
+		<h:form role="form" class="form-inline" id="login-form">
+			<div class="form-group">
+				<h:inputText class="form-control" name="login" placeholder="Username" value="#{userBean.login}"/>
+			</div><br /><br />
+			<div class="form-group">
+				<h:inputSecret class="form-control" name="password" placeholder="Password" value="#{userBean.password}"/>
+			</div><br /><br />
+			<h:commandButton class="btn btn-primary" id="button-search" value="Confirm" action="#{userBean.logIn()}" />
+		</h:form>
+	</div>
+  </h:body>
+</html>
